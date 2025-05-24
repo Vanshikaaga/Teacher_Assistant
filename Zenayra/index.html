@@ -1,0 +1,123 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech to text</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="voice_to_text">
+        <h1>Voice to text Converter</h1>
+        <p id="status_message">Press the button and start speaking!</p>
+        <textarea id="convert_text"></textarea>
+        <button id="click_to_convert">Voice to Text</button>
+        <p id="response_text"></p>
+    </div>
+
+<script src="index.js"></script>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot System</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>Chatbot System</h1>
+    <div id="chat-box"></div>
+
+    <!-- Text Input -->
+    <textarea id="user-input" placeholder="Type your message here..."></textarea>
+    <button onclick="sendMessage()">Send</button>
+
+    <!-- Voice Input -->
+    <button onclick="startVoice()">🎤 Speak</button>
+    <input type="file" id="file-input" />
+    
+    <script>
+        // Display chat messages
+        function displayMessage(sender, message) {
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML += `<p><b>${sender}:</b> ${message}</p>`;
+        }
+
+        // Send message to backend
+        function sendMessage(isVoice = false) {
+            const userInput = document.getElementById('user-input').value;
+            const fileInput = document.getElementById('file-input');
+            const file = fileInput.files[0];
+            if (!userInput && !file) return;
+            if (!userInput && !file) return;
+
+            const formData = new FormData();
+            formData.append('text', userInput);
+            formData.append('is_voice', isVoice);
+
+            if (file) {
+                formData.append('file', file);  // Append file if selected
+            }
+            displayMessage('You', userInput);
+            axios.post('http://localhost:5000/api/chat',formData, {
+                headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+            }).then(response => {
+                speak(response.data.reply);
+                displayMessage('Bot', response.data.reply);
+                
+            }).catch(err => {
+                console.error(err);
+                displayMessage('Bot', 'An error occurred!');
+            });
+
+            document.getElementById('user-input').value = '';
+        }
+        function uploadFile() {
+            const fileInput = document.getElementById('file-input');
+            const file = fileInput.files[0];
+            if (!file) {
+                alert('Please select a file to upload!');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            axios.post('http://localhost:5000/api/chat_with_gemini', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then(response => {
+                displayMessage('Bot', response.data.message);
+                fileInput.value = '';
+                
+            }).catch(err => {
+                console.error(err);
+                displayMessage('Bot', 'File upload failed!');
+            });
+        }
+        function speak(text) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        window.speechSynthesis.speak(utterance);
+            }
+        // Start voice recognition
+        function startVoice() {
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+
+            recognition.onresult = function (event) {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('user-input').value = transcript;
+                sendMessage(true); // Mark as voice input
+            };
+
+            recognition.start();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timetable</title>
+    <link rel="stylesheet" href="tt-style.css">
+</head>
+<body>
+        <!-- Navbar -->
+ 
+
+    <!-- Card -->
+    <div class="card">
+        <h1>Timetable</h1>
+
+        <!-- Upload PDF -->
+        <div class="upload-section">
+            <label for="timetable-upload">Upload Timetable (PDF):</label>
+            <input type="file" id="timetable-upload" accept="application/pdf">
+            <button onclick="uploadPDF()">Upload</button>
+            <div id="upload-alert" class="alert" style="display: none;"></div>
+        </div>
+
+        <!-- Select Day -->
+        <select id="day-select">
+            <option value="" disabled selected>Select a day</option>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+        </select>
+
+        <!-- Select Time -->
+        <!-- <input type="time" id="time-select"> -->
+
+        <!-- Get Schedule -->
+        <button onclick="fetchSchedule()">Get Schedule</button>
+
+        <div class="schedule" id="schedule">
+            <!-- Schedule will appear here -->
+        </div>
+
+        <div id="time-alert" class="alert" style="display: none;"></div>
+    </div>
+
+    <script src="tt-script.js"></script>
+</body>
+</html>

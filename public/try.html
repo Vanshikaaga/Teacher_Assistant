@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Content Generator</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.header {
+    background: url('banner4.png') no-repeat top center;
+    background-size: cover; /* Ensures the image covers the entire area */
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 2px solid #ddd;
+}
+
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+    gap: 20px; /* Add spacing between columns */
+}
+
+.column {
+    flex: 1;
+    min-width: 300px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.sidebar {
+    max-width: 250px;
+    background-color: #ffffff;
+    border-right: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+    
+}
+
+.content {
+    flex: 3;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for better distinction */
+}
+
+input, select, textarea, button {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    box-sizing: border-box;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #ffffff;
+}
+
+button {
+    background-color: white; /* Light whitish-gray color */
+    color: #ED8863; /* Dark gray text for contrast */
+    border: 1px solid #ccc; /* Subtle border for button */
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
+    width: 250px; /* Fixed width for all buttons */
+    margin-right: 10px; /* Space between buttons when on the same line */
+    padding: 10px;
+    text-align: center; /* Center the text in the button */
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #e0e0e0; /* Slightly darker shade on hover */
+    border-color: #bbb; /* Adjust border for hover effect */
+}
+
+button:active {
+    background-color: #d9d9d9; /* Even darker shade when clicked */
+    border-color: #aaa; /* Adjust border for active state */
+}
+
+button + button { 
+    margin-left: 5px; /* Ensure consistent spacing if buttons are inline siblings */
+}
+
+/* Wrapper class to arrange buttons in the same line */
+.button-container {
+    display: flex;
+    justify-content: flex-start; /* Align buttons to the left */
+    align-items: center;
+    gap: 10px; /* Spacing between buttons */
+    margin-top: 10px; /* Add spacing above button container */
+}
+
+
+.expander {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px dashed #ccc;
+    background-color: #ffffff;
+    border-radius: 5px;
+    font-style: italic;
+    color: #555555;
+}
+
+.content h3 {
+    color: rgb(35, 35, 35);
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.content ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.content ul li {
+    padding-left: 20px;
+    margin-bottom: 5px;
+    position: relative;
+}
+
+.content ul li::before {
+    content: "•";
+    color: #007bff;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+#course-outline {
+    margin-top: 20px;
+    display: none;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+/* Spinner styling */
+.loading-spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid #007bff; /* Blue spinner */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Overlay styling */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.3s;
+}
+
+.loading-overlay.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Add responsiveness for smaller screens */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        gap: 10px; /* Adjust spacing */
+    }
+
+    .sidebar {
+        max-width: 100%; /* Allow sidebar to stretch full width */
+        border-right: none; /* Remove border for mobile view */
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Course Content Generator</h1>
+    </div>
+    <div class="container">
+        <div class="column sidebar">
+            <h2>Course Details 📋</h2>
+            <label for="course-name">Course Name:</label>
+            <input type="text" id="course-name" placeholder="Enter course name...">
+            
+            <label for="target-audience">Target Audience Edu Level:</label>
+            <select id="target-audience">
+                <option>Primary</option>
+                <option>High School</option>
+                <option>Diploma</option>
+                <option>Bachelors</option>
+                <option>Masters</option>
+            </select>
+
+            <label for="difficulty-level">Course Difficulty Level:</label>
+            <select id="difficulty-level">
+                <option>Beginner</option>
+                <option>Intermediate</option>
+                <option>Advanced</option>
+            </select>
+
+            <label for="modules">No. of Modules:</label>
+            <input type="number" id="modules" min="1" max="15" value="1">
+
+            <label for="duration">Course Duration:</label>
+            <input type="text" id="duration" placeholder="e.g., 10 weeks">
+
+            <label for="credit">Course Credit:</label>
+            <input type="text" id="credit" placeholder="e.g., 3 credits">
+
+            <button id="generate-outline">Generate Course Outline</button>
+            <button id="new-course" style="display: none;">Start a New Course</button>
+        </div>
+        <div class="column content">
+            <h2>Generated Course Content 📝</h2>
+            <div id="generated-content" class="expander">
+                <p>Generated course outline will appear here.</p>
+            </div>
+            <div class="loading-overlay" id="loading-overlay">
+                <div class="loading-spinner"></div>
+            </div>
+            
+            <div id="actions" style="display: none;">
+                <!-- <button id="complete-course">Generate Complete Course</button>
+                <button id="modify-course">Modify Course Outline</button> -->
+        <!-- <button id="view-outline" style="display: none;">View Course Outline</button> -->
+            </div>
+        </div>
+    </div>
+
+    <script src="try.js"></script>
+</body></html>    

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment Details</title>
+    <link rel="stylesheet" href="assign.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-left">
+                
+                <img src="teacher.png" alt="Google Classroom Logo" class="google-logo">
+                <span class="logo">ProfPal</span>
+            </div>
+            <div class="header-right">
+                <span class="material-icons">apps</span>
+                <span class="material-icons">account_circle</span>
+            </div>
+        </header>
+        <main class="main-content">
+            <div class="assignment-container">
+                <div class="assignment" id="assignment">
+                    <div id="class-details"></div>
+                    <!-- <h1>Week 12 - 13</h1>
+                    <p class="details">ARPITA JADHAV BHATT • Oct 21</p>
+                    <p class="points">5 points</p> -->
+                    <div class="file-attachment">
+                        <span class="material-icons">folder</span>
+                        <a href="#" class="file-link">Week_12_13.zip</a>
+                        <span class="file-type">Compressed Archive</span>
+                    </div>
+                </div>
+                
+                <div class="sidebar">
+                    <div class="your-work">
+                        <h3>List of pupils</h3>
+                        <section class="section classmates">
+                            <h2>Classmates</h2>
+                            <p class="student-count" id="studentCount"></p>
+                            <ul class="student-list" id="studentList">
+                                <!-- Student items will be dynamically added here -->
+                            </ul>
+                        </section>
+                    </div>
+                    <!-- <div class="private-comments">
+                        <h3>Private comments</h3>
+                        <a href="#">Add comment to ARPITA JADHAV BHATT</a>
+                    </div> -->
+                </div>
+            </div>
+        </main>
+        <!-- <h1>Assignment Details</h1>
+        <div id="assignment-details"></div>
+        <h2>Students who Completed the Assignment</h2>
+        <ul id="students-list"></ul> -->
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+
+        // Get the assignment ID from the URL
+        const params = new URLSearchParams(window.location.search);
+        const assignmentId = params.get('id'); // Extract assignment ID from URL
+    
+        // Function to fetch class details by classId
+        async function fetchClassDetails(classId) {
+            try {
+                const response = await fetch(`http://localhost:5000/class/${classId}`);
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching class details:', error);
+                throw error;
+            }
+        }
+        
+        // Fetch the assignment details from the server
+        async function fetchAssignmentDetails() {
+            try {
+                const response = await fetch(`http://localhost:5000/assignments/${assignmentId}`);
+                const data = await response.json();
+                const studentsList = document.getElementById('studentList');
+                
+                if (data.assignment) {
+                    const assignment = data.assignment;
+                    const classData = await fetchClassDetails(assignment.classId);
+                    if (assignment){ 
+                        console.log(assignment)
+                        const teacherName =  classData.classDetails.instructorName;
+                    
+                    // Display assignment details
+                    const assignmentDetailsDiv = document.getElementById('assignment');
+                    if (assignmentDetailsDiv) {
+                        const dueDate = new Date(assignment.dueDate);
+                        const formattedDate = dueDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+                        console.log(formattedDate); // Output: 21 Oct
+                        console.log(assignment.fileUrl)
+                        const fileLink = assignment.fileUrl
+                        ? `
+                            <div class="file-preview">
+                                ${getFilePreview(assignment.fileUrl)}
+                                <a href="${assignment.fileUrl}" download>${getFileName(assignment.fileUrl)}</a>
+                            </div>
+                            `
+                        : `<p>No file uploaded</p>`;
+
+                        assignmentDetailsDiv.innerHTML = `
+                        <h1>${assignment.title}</h1>
+                        <p class="details">${teacherName} • ${formattedDate}</p>
+                        <p class="points">5 points</p>
+                        ${fileLink}
+                        `;
+
+/**
+ * Function to return file preview element (icon or thumbnail)
+ * @param {string} fileUrl - The file URL
+ * @returns {string} - HTML string for file preview
+ */
+ function getFilePreview(fileUrl) {
+  const fileType = getFileType(fileUrl);
+
+  // Check if the file is a PDF
+  if (fileType === 'pdf') {
+    return `<canvas class="pdf-thumbnail" data-url="${fileUrl}" style="width: 50px; height: 50px;"></canvas>`;
+  }
+
+  // Check if the file is an image
+  if (fileType === 'image') {
+    return `<img src="${fileUrl}" alt="Image Preview" style="width: 50px; height: 50px; object-fit: cover; margin-right: 8px;">`;
+  }
+
+  // Default to PDF icon for unsupported file types
+  return `<img src="icon1.png" alt="File Icon" style="width: 24px; height: 24px; vertical-align: middle; margin-right: 8px;">`;
+}
+
+/**
+ * Function to get file type based on URL
+ * @param {string} fileUrl - The file URL
+ * @returns {string} - 'pdf', 'image', or 'unknown'
+ */
+function getFileType(fileUrl) {
+  const extension = fileUrl.split('.').pop().toLowerCase();
+  if (['jpg', 'jpeg', 'png', 'gif'].includes(extension)) return 'image';
+  if (extension === 'pdf') return 'pdf';
+  return 'unknown';
+}
+
+/**
+ * Function to get file name from URL
+ * @param {string} fileUrl - The file URL
+ * @returns {string} - File name
+ */
+function getFileName(fileUrl) {
+  return fileUrl.split('/').pop() || 'Download File';
+}
+
+// Render PDF Thumbnails using PDF.js
+// document.querySelectorAll('.pdf-thumbnail').forEach(async (canvas) => {
+//   const url = canvas.dataset.url;
+//   const loadingTask = pdfjsLib.getDocument(url);
+//   const pdf = await loadingTask.promise;
+//   const page = await pdf.getPage(1); // First page
+
+//   const viewport = page.getViewport({ scale: 0.2 }); // Small thumbnail
+//   const context = canvas.getContext('2d');
+//   canvas.width = viewport.width;
+//   canvas.height = viewport.height;
+
+//   const renderContext = { canvasContext: context, viewport };
+//   await page.render(renderContext).promise;
+// });
+//                                             const a=assignment.studentsSubmitted;
+                    
+                    // // Display the list of students who submitted the assignment
+                    
+                    if (studentsList) {
+                        
+    studentsList.innerHTML = ''; // Clear previous list
+
+    assignment.studentsSubmitted.forEach(submission => {
+        // Find the student in classData.classDetails.students
+        
+        const student = classData.classDetails.students.find(
+            s => s.enrollmentNumber === submission.enrollmentNumber
+        );
+        console.log(student)
+        if (student) {
+            // Create a list item for the student's name and id
+            const studentItem = document.createElement('li');
+            studentItem.className = 'student-item';
+            const initial = document.createElement('div');
+            initial.className = 'student-initial';
+            initial.innerText = student.name.charAt(0).toUpperCase();
+ 
+            const details = document.createElement('div');
+            details.className = 'student-details';
+            const name = document.createElement('span');
+            name.className = 'student-name';
+            name.innerText = student.name;
+
+            const id = document.createElement('span');
+            id.className = 'student-id';
+            id.innerText = student.enrollmentNumber;
+            
+            const filePreview = document.createElement('div');
+             filePreview.className = 'file-preview';
+              
+            if (submission.fileUrl) {
+                const canvas = document.createElement('canvas');
+                            canvas.className = 'pdf-thumbnail';
+                            canvas.dataset.url = submission.fileUrl;
+                            filePreview.appendChild(canvas);
+
+                            const fileLink = document.createElement('a');
+                            fileLink.href = submission.fileUrl;
+                            fileLink.download = getFileName(submission.fileUrl); // Use the file name
+                            fileLink.innerText = getFileName(submission.fileUrl); // Display the file name
+                            filePreview.appendChild(fileLink);
+            } else {
+                const noFileText = document.createElement('span');
+                noFileText.innerText = 'No file submitted';
+                filePreview.appendChild(noFileText);
+            }
+            const icon = document.createElement('img');
+            icon.src = 'Checker.png';  // Path to your image file
+icon.alt = 'Checker Icon';  // Alt text for accessibility
+icon.className = 'file-icon';  // Example icon, change this to any other icon
+
+// Add a click event listener to the icon
+icon.onclick = async function () {
+    const teacherFileUrl = assignment.fileUrl; // URL of the teacher's file
+    const studentFileUrl = submission.fileUrl; // URL of the student's submitted file
+    console.log(teacherFileUrl)
+    console.log(studentFileUrl)
+    if (!studentFileUrl || !teacherFileUrl) {
+        alert("One or both files are missing. Cannot check plagiarism.");
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:5001/compare-pdfs', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                file1: teacherFileUrl,
+                file2: studentFileUrl,
+            }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            alert(`Plagiarism similarity: ${result.plagiarism_percentage}%`);
+        } else {
+            alert(`Error: ${result.message}`);
+        }
+    } catch (error) {
+        console.error('Error checking plagiarism:', error);
+        alert('An error occurred while checking plagiarism. Please try again.');
+    }
+};
+
+
+// Append the icon to the file preview
+filePreview.appendChild(icon);
+            details.appendChild(name);
+            details.appendChild(id);
+            details.appendChild(filePreview);
+            // studentItem.textContent = `Name: ${student.name}`;
+            studentItem.appendChild(initial);
+            studentItem.appendChild(details);
+            studentsList.appendChild(studentItem);
+            console.log(studentsList)
+        } else {
+            // Handle case where student is not found
+            const li = document.createElement('li');
+            li.textContent = `Enrollment Number: ${enrollmentNumber} - Not Found`;
+            studentsList.appendChild(li);
+        }
+    });
+}}
+                    
+                }renderPDFThumbnails();}
+            } catch (error) {
+                console.error('Error fetching assignment details:', error);
+            }
+        }
+        async function renderPDFThumbnails() {
+    const canvases = document.querySelectorAll('.pdf-thumbnail');
+
+    for (const canvas of canvases) {
+        const url = canvas.dataset.url;
+
+        try {
+            // Check if a rendering operation is already ongoing
+            if (canvas.renderInProgress) {
+                console.warn(`Rendering already in progress for ${url}`);
+                continue;
+            }
+
+            canvas.renderInProgress = true; // Flag the canvas as "busy"
+
+            const loadingTask = pdfjsLib.getDocument(url);
+            const pdf = await loadingTask.promise;
+            const page = await pdf.getPage(1);
+
+            const viewport = page.getViewport({ scale: 0.2 });
+            const context = canvas.getContext('2d');
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+
+            const renderContext = { canvasContext: context, viewport };
+            await page.render(renderContext).promise;
+
+            canvas.renderInProgress = false; // Mark rendering as complete
+        } catch (error) {
+            console.error(`Error rendering thumbnail for ${url}:`, error);
+
+            // Provide a fallback message or icon
+            canvas.insertAdjacentHTML('afterend', '<span>Unable to display preview</span>');
+        }
+    }
+}
+
+
+// Call this function after the assignment data is loaded and the DOM is updated
+fetchAssignmentDetails().then(() => {
+    renderPDFThumbnails();
+});
+ 
+        // Run the function to fetch assignment details
+     
+    </script>
+</body></html>    

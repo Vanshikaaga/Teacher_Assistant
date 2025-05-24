@@ -1,0 +1,371 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 1450px;
+    /* margin: 0 auto; */
+}
+
+.header {
+    display: flex;
+    width: 100%;
+    height: 40px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 40px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+}
+
+.header-left {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    gap: 15px; /* Reduced the gap between elements */
+    font-size: 25px;
+}
+
+.header-left .breadcrumb {
+    padding-top: 5px;
+    align-items: center;
+    font-size: 14px;
+    color: #888;
+}
+.google-logo {
+    width: 30px; /* Adjust the size as needed */
+    height: auto;
+    margin-left: 5px; /* Adds a small space between the menu icon and the logo */
+    margin-right: 2px; /*Adds space between the logo and Classroom text */
+}
+
+.header-right .material-icons {
+    font-size: 24px;
+    cursor: pointer;
+    margin-left: 15px;
+}
+
+.main-content {
+    display: flex;
+    padding-top: 20px;
+    padding-left: 75px;
+    flex-direction: column; /* Stack elements vertically */
+    gap: 20px; /* Space between sections */
+}
+
+.assignment {
+    background-color: #ffffff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.assignment h1 {
+    margin: 0;
+    font-size: 24px;
+    color: #444;
+}
+
+.assignment .details {
+    color: #888;
+    font-size: 14px;
+}
+
+.assignment .points {
+    color: #555;
+    font-weight: bold;
+}
+
+.assignment-container {
+    display: flex;
+    flex-direction: column; /* Ensure stacking of child elements */
+    gap: 20px;
+}
+
+.file-attachment {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.file-attachment .material-icons {
+    font-size: 24px;
+    color: #4CAF50;
+    margin-right: 10px;
+}
+
+.file-attachment .file-link {
+    color: #4285F4;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.comments h3 {
+    margin-top: 30px;
+    font-size: 16px;
+    color: #444;
+}
+
+.comments a {
+    color: #4285F4;
+    text-decoration: none;
+}
+
+.sidebar {
+    background-color: #ffffff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 97%; /* Ensure full width for smaller screens */
+}
+
+.sidebar h3 {
+    font-size: 16px;
+    color: #444;
+}
+
+.add-btn, .mark-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-btn {
+    background-color: #4285F4;
+    color: #ffffff;
+}
+
+.mark-btn {
+    background-color: #4CAF50;
+    color: #ffffff;
+}
+
+.note {
+    font-size: 12px;
+    color: #888;
+    margin-top: 10px;
+}
+
+.private-comments a {
+    color: #4285F4;
+    text-decoration: none;
+    display: block;
+    margin-top: 10px;
+}
+
+
+/* Students */
+.student-count {
+    font-size: 0.9rem;
+    color: #5f6368;
+    margin-bottom: 10px;
+}
+.student-list {
+    list-style: none;
+    padding: 0;
+}
+
+.student-item {
+    display: flex;
+    align-items: center;
+    padding: 24px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+.student-item .file-preview{
+    margin-left: 100px;
+}
+.file-preview {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 8px 0;
+    padding: 10px; /* Add padding if needed for extra space around elements */
+    border: 1px solid #ddd; /* Border around the whole .file-preview container */
+    border-radius: 8px;
+    
+  }
+  .file-preview img,
+  .file-preview canvas {
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    padding: 8px; /* Optional: space between image/canvas and border */
+    background-color: #fff;
+    width: 50px; /* Set a fixed width for the preview image */
+    height: 50px;
+  }
+  .file-preview a {
+    text-decoration: none;
+    color: #007bff;
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+  .file-preview a:hover {
+    text-decoration: underline;
+  }
+  .file-preview .file-icon{
+ border:0px;
+ width:45px;
+ height:45px;
+  }
+  
+.student-initial {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #fbbc05;
+    border-radius: 50%;
+    margin-right: 16px;
+}
+
+.student-details {
+    display: flex;
+    align-items: center;
+}
+
+.student-name {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #202124;
+    margin-right: 16px;
+    text-transform: uppercase;
+
+}
+
+.student-id {
+    font-size: 0.85rem;
+    color: #5f6368;
+}
+
+.message-button {
+    background: none;
+    border: none;
+    color: #1a73e8;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    margin-left: auto;
+}
+
+.message-button:hover {
+    color: #0c66c2;
+}
+
+
+/* body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 100%;
+    padding: 0 15px;
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 10px 20px;
+    }
+
+    .header-left {
+        flex: 1;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .breadcrumb {
+        font-size: 12px;
+    }
+
+    .main-content {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .assignment-container {
+        gap: 15px;
+    }
+
+    .assignment, .sidebar {
+        padding: 15px;
+        font-size: 14px;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .student-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .student-initial {
+        margin-bottom: 8px;
+    }
+
+    .student-name {
+        font-size: 0.9rem;
+    }
+
+    .student-id {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+    .header-left {
+        gap: 10px;
+    }
+
+    .breadcrumb {
+        font-size: 13px;
+    }
+
+    .assignment, .sidebar {
+        padding: 18px;
+    }
+
+    .student-name {
+        font-size: 1rem;
+    }
+
+    .student-id {
+        font-size: 0.85rem;
+    }
+}
+
+@media (min-width: 1025px) {
+    .container {
+        max-width: 1450px;
+        margin: 0 auto;
+    }
+
+    .header-left {
+        gap: 15px;
+    }
+
+    .main-content {
+        padding-left: 75px;
+        padding-right: 75px;
+    }
+} */

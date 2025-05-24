@@ -1,0 +1,6 @@
+*.json
+*.key
+*.pem
+Zenayra/serviceAccountKey.json
+Zenayra/SpeechToText/serviceAccountKey.json
+Zenayra/SpeechToText/uploads/

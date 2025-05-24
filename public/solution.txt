@@ -1,0 +1,208 @@
+public class LL
+{
+    private Node head;
+    private Node tail;
+    private int size;
+
+    public LL()
+    {
+        this.size = 0;
+    }
+
+    public void insertFirst(int val)
+    {
+        Node node = new Node(val);
+        node.next = head;
+        head = node;
+        if(tail == null)
+        {
+            tail = head;
+        }
+        size = size +1;
+    }
+
+    public void insertLast(int val)
+    {
+        if(tail == null)
+        {
+            insertFirst(val);
+            return;
+        }
+        Node node = new Node(val);
+        tail.next = node;
+        tail = node;
+
+    }
+
+    public void insert(int val, int index)
+    {
+        if(index == 0)
+        {
+            insertFirst(val);
+            return;
+        }
+        if(index == size)
+        {
+            insertLast(val);
+            return;
+        }
+        Node temp = head;
+        Node node = new Node(val);
+        for (int i = 1; i < index; i++)
+        {
+            temp = temp.next;
+        }
+        node.next = temp.next;
+        temp.next = node;
+    }
+
+    //insertion using recursion
+    public void insertRec(int val, int index){
+        head = insertRec(val,index,head);
+    }
+    private Node insertRec(int val, int index, Node node){
+        if(index == 0){
+            Node temp = new Node(val,node);
+            size++;
+            return temp;
+        }
+        node.next = insertRec(val,index-1,node.next);
+        return node;
+    }
+
+    public Node secondLast(int index)
+    {
+        Node temp = head;
+        for (int i = 1; i < index; i++)
+        {
+            temp = temp.next;
+        }
+        return temp;
+    }
+
+    public void delete(int index)
+    {
+        Node temp = secondLast(index);
+        temp.next = temp.next.next;
+    }
+    public void display()
+    {
+        Node temp = head;
+        while(temp!=null)
+        {
+            System.out.print(temp.val +" -> ");
+            temp = temp.next;
+        }
+        System.out.println("END");
+    }
+
+    private class Node
+    {
+        private int val;
+        private Node next;
+        public Node(int val)
+        {
+            this.val = val;
+        }
+
+        public Node(int val,Node next)
+        {
+            this.val = val;
+            this.next = next;
+        }
+
+    }
+    // Questions Leetcode
+    //1.remove duplicates from sorted list
+    public void duplicates(){
+        Node node = head;
+        while (node.next != null) {
+            if(node.val == node.next.val){
+                node.next = node.next.next;
+                size--;
+            } else {
+                node = node.next;
+            }
+        }
+        tail = node;
+        tail.next = null;
+    }
+
+    //2. merger two sorted lists
+    public static LL merge(LL first, LL second) {
+        Node h1 = first.head;
+        Node h2 = second.head;
+
+        LL ans = new LL();
+        while(h1 != null && h2 != null) {
+            if(h1.val == h2.val){
+                ans.insertLast(h1.val);
+                h1 = h1.next;
+                h2 = h2.next;
+            } else if(h1.val < h2.val) {
+                ans.insertLast(h1.val);
+                h1 = h1.next;
+            } else {
+                ans.insertLast(h2.val);
+                h2 = h2.next;
+            }
+        }
+
+        while (h1 != null) {
+            ans.insertLast(h1.val);
+            h1 = h1.next;
+        }
+        while (h2 != null) {
+            ans.insertLast(h2.val);
+            h2 = h2.next;
+        }
+        return ans;
+//        if(h1 != null){
+//            ans.head.next = h1;
+//        } else {
+//            ans.head.next = h2;
+//        }
+//        ans.head = ans.head.next;
+//        return ans;
+    }
+
+    //3. Cycle detection (fast and slow pointer method)
+//    public boolean hasCycle(LL head){
+//        Node slow = head;
+//    }
+
+    //4. Reversal iteration
+        public void reverse(){
+            Node prev = null;
+            Node curr = head;
+            Node nxt = curr.next;
+            while (curr != null){
+                curr.next = prev;
+                prev = curr;
+                curr = nxt;
+                if(nxt != null) {
+                    nxt = nxt.next;
+                }
+            }
+            head = prev;
+        }
+        //5. Rotate Linked List
+    public  Node rotate(Node head, int k){
+        Node secLast = head;
+        while(secLast.next.next != null) {
+            secLast = secLast.next;
+        }
+        Node last = secLast.next;
+        for (int i = 0; i < k; i++) {
+            last.next = head;
+            secLast.next = null;
+            last = secLast;
+        }
+        return head;
+    }
+
+    public static void main(String[] args) {
+
+    }
+
+}

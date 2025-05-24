@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProfPal</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #4d4d4d;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+
+        #chat-container {
+            background-color: rgba(255, 255, 255, 0.15);
+            width: 100%;
+            max-width: 500px;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        #chat-header {
+            background-color: rgba(237, 136, 99, 0.4);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            backdrop-filter: blur(8px);
+        }
+
+        #chat-box {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: rgba(249, 249, 249, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            display: inline-block;
+            margin-bottom: 15px;
+            padding: 12px 15px;
+            border-radius: 12px;
+            max-width: 70%;
+            word-wrap: break-word;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-message {
+            background-color: rgba(255, 255, 255, 0.25);
+            align-self: flex-end;
+            color: #000;
+            margin-left: auto;
+            backdrop-filter: blur(4px);
+        }
+
+        .bot-message {
+            background-color: rgba(255, 255, 255, 0.2);
+            align-self: flex-start;
+            color: #000;
+            backdrop-filter: blur(4px);
+        }
+
+        #input-container {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+        }
+
+        #user-input {
+            flex-grow: 1;
+            padding: 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-size: 14px;
+            resize: none;
+            max-height: 100px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #000;
+            backdrop-filter: blur(4px);
+        }
+
+        #user-input::placeholder {
+            color: rgba(0, 0, 0, 0.7);
+        }
+
+        #action-buttons {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 10px;
+        }
+
+        button {
+            background-color: rgba(237, 136, 99, 0.4);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        button:hover {
+            background-color: rgba(235, 101, 52, 0.6);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        #chat-box::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #chat-box::-webkit-scrollbar-thumb {
+            background-color: rgba(221, 221, 221, 0.3);
+            border-radius: 4px;
+        }
+
+        #chat-box::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(187, 187, 187, 0.5);
+        }
+
+        #file-input {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="chat-header">ProfPal</div>
+        <div id="chat-box"></div>
+        <div id="input-container">
+            <textarea id="user-input" placeholder="Type your message..." rows="1"></textarea>
+            <div id="action-buttons">
+                <button onclick="sendMessage()">
+                    <img src="send.png" alt="mssgsend" style="width: 20px; height: 20px;">
+                </button>
+                <button onclick="startVoice()">
+                    <img src="mic.png" alt="voicestart" style="width: 20px; height: 20px;">
+                </button>
+                <button onclick="document.getElementById('file-input').click()">
+                    <img src="file.png" alt="Upload File" style="width: 20px; height: 20px;">
+                </button>
+                
+            </div>
+        </div>
+        <input type="file" id="file-input" />
+    </div>
+
+    <script>
+        const userInput = document.getElementById('user-input');
+        userInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        // Enable sending message with Enter key
+        userInput.addEventListener('keydown', function(event) {
+            // Send on Enter, but allow Shift+Enter for new line
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault(); // Prevent default new line
+                sendMessage();
+            }
+        });
+
+        function displayMessage(sender, message, type = 'bot') {
+            const chatBox = document.getElementById('chat-box');
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', `${type}-message`);
+            messageElement.innerHTML = `<b>${sender}:</b> ${escapeHTML(message)}`;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function escapeHTML(str) {
+            if (!str) return ""; // Return an empty string if input is undefined or null
+    return str.replace(/[&<>"']/g, function (match) {
+        return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;"
+        }[match];
+    });
+        }
+
+        function sendMessage(isVoice = false) {
+            const userInput = document.getElementById('user-input');
+            const fileInput = document.getElementById('file-input');
+            const message = userInput.value.trim();
+            const file = fileInput.files[0];
+            if (!message) return;
+
+            displayMessage('You', message, 'user');
+            userInput.value = '';
+            userInput.style.height = 'auto';
+
+            const formData = new FormData();
+            formData.append('text', message);
+            formData.append('is_voice', isVoice);
+            if (file) {
+                formData.append('file', file);  // Append file if selected
+            }
+            axios.post('http://localhost:5003/api/chat', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            })
+            .then(response => {
+                
+                if (response.data.redirect) {
+        // Redirect the user to the new pag
+        console.log("hi")
+          window.location.href = "http://127.0.0.1:5003";}
+                speak(response.data.reply);
+                displayMessage('Bot', response.data.reply);
+            })
+            .catch(error => {
+                console.error(error);
+                displayMessage('Bot', 'An error occurred!');
+            });
+        }
+
+        function uploadFile() {
+            const fileInput = document.getElementById('file-input');
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            displayMessage('You', `Uploaded: ${file.name}`, 'user');
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            axios.post('http://localhost:5003/api/chat_with_gemini', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            })
+            .then(response => {
+                displayMessage('Bot', response.data.message);
+                fileInput.value = '';
+            })
+            .catch(error => {
+                console.error(error);
+                displayMessage('Bot', 'File upload failed!');
+            });
+        }
+
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function startVoice() {
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('user-input').value = transcript;
+                sendMessage(true);
+            };
+            recognition.start();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProfPal - Login</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f0f0f0; /* Light grey background */
+        }
+
+        .block {
+            width: 100%;
+        }
+
+        .login-container {
+            display: flex;
+            width: 900px;
+            height: 500px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .login-left {
+            flex: 1;
+            background: #ed8863;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .logo {
+            width: 100px;
+            margin-bottom: 15px;
+        }
+
+        .login-left h2 {
+            font-family: "Montserrat", sans-serif;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .login-right {
+            flex: 1.5;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            background-color: #ffffff; /* Ensuring background color */
+            border-left: 2px solid #ddd; /* Adding a slight border between left and right section */
+        }
+
+        .login-right h2 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .loginForm {
+            width: 100%; /* Make form take full width of the container */
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px; /* Increased padding for better input experience */
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border: 1px solid #ed8863;
+            box-shadow: 0 0 5px #ed8863;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            background: #ed8863;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn:hover {
+            background: #db764f;
+        }
+
+        .register-link {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        .register-link a {
+            color: #ed8863;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <!-- Left Section -->
+        <div class="login-left">
+            <img src="teacher.png" class="logo" />
+            <h2>ProfPal - Teacher's Assistance</h2>
+        </div>
+
+        <!-- Right Section -->
+        <div class="login-right">
+            <h2>Log In</h2>
+            <form id="loginForm" class="loginForm">
+                <div class="form-group">
+                    <label for="email">Username</label>
+                    <input class="block" type="email" id="email" placeholder="Enter your email" required />
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input class="block" type="password" id="password" placeholder="Enter your password" required />
+                </div>
+
+                <button type="submit" class="btn" onclick="window.location.href = 'http://localhost:5000/d.html'">Submit</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        const form = document.getElementById("loginForm");
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            try {
+                const response = await fetch("http://localhost:5000/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert(`Welcome, ${data.name}`);
+                    localStorage.setItem("token", data.token);
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Something went wrong!");
+            }
+        });
+    </script>
+</body>
+</html>

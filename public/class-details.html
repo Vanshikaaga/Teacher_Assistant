@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProfPal</title>
+    <link rel="icon" type="image/png" href="teacher.png"> 
+    <link rel="stylesheet" href="people.css">
+</head>
+<body>
+    <!-- <div class="navbar">
+        <a href="new.html">Stream</a>
+        <a href="#">Classwork</a>
+        <a href="#" class="active">People</a>
+    </div> -->
+    <!-- <div id="navbar"></div> -->
+    <div class="navbar">
+        <a id="home-img" onclick="redirectToHome()" class="active">Home</a>
+        <a id="streamLink" onclick="redirectToStream()" class="active">Stream</a>
+        <a id="classworkLink" onclick="redirectTocW()" class="active">Classwork</a>
+        <a id="peopleButton" onclick="redirectToPeople()" class="active">People</a>
+        <a id="attendanceButton" class="active">Attendance</a>
+    </div>
+    <div class="container">
+        <section class="section teachers">
+            <h2>Teachers</h2>
+            <div class="teacher">
+                <span class="teacher-name" id="teacherName">Loading...</span>
+                <button class="message-button">
+                    <img src="grade_prediction_icon.png" alt="Message" class="button-icon">
+                </button>
+            </div>
+        </section>
+
+        <section class="section classmates">
+            <h2>Classmates</h2>
+            <p class="student-count" id="studentCount">Loading students...</p>
+            <ul class="student-list" id="studentList">
+                <!-- Student items will be dynamically added here -->
+            </ul>
+            
+            
+        </section>
+    </div>
+
+    <script src="class-details.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        fetch('navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                const navbarContainer = document.getElementById('navbar');
+                if (navbarContainer) {
+                    navbarContainer.innerHTML = data;
+                } else {
+                    console.error('Navbar container not found.');
+                }
+            })
+            .catch(error => console.error('Error loading navbar:', error));
+    });
+</script>    
+</body>
+</html>

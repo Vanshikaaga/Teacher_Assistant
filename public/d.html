@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProfPal</title>
+    <link rel="icon" type="image/png" href="teacher.png"> 
+    <link rel="stylesheet" href="dashboard.css">
+    <link
+      href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+      rel="stylesheet"
+    />
+    <link href="https://fonts.googleapis.com/css2?family=Bokor&family=Montserrat:ital,wght@0,100..900;1,100..900&
+    family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+          <section class="navbar-brand">
+            <span class="material-icons menu-icon" onclick="toggleSidebar()"> menu </span>
+            <img
+              class="brand-logo"
+              src="teacher.png"
+              alt="Google Logo"
+            /><span class="brand-text" style="font-family: 'Montserrat', sans-serif; font-size: 1.38125rem; color: #303030;">ProfPal</span>
+
+          </section>
+          <section class="navbar-menu">
+            <button class="create-class-btn" onclick="openClassForm()">
+                <span class="material-icons add-icon"> add </span>
+              </button>
+              
+            <span class="material-icons apps-icon" onclick="window.location.href = 'time-tabel.html'"> today </span>
+            <span class="material-icons big-img account-icon">
+              account_circle
+            </span>
+          </section>
+        </nav>
+      </header>
+      <aside class="sidebar" id="sidebar">
+        <ul class="sidebar-menu">
+            <li><span class="material-icons">home</span> Home</li>
+           
+            <li onclick="window.location.href = 'chatbot.html'">
+              <span class="material-icons">mic</span>Voice Assistance</li>
+            <li onclick="window.location.href='try.html'">
+              <span class="material-icons">chat</span> Content Creation
+          </li>
+          
+            
+        </ul>
+    </aside>
+    <main class="main">
+    <div class="dashboard" id="classDashboard">
+        <!-- Classes will be dynamically added here -->
+    </div>
+    <span class="material-icons help-icon"> help_outline </span>
+  </main>
+    <!-- Create Class Modal -->
+    <div class="form-holder">
+      <div class="form-content">
+          <div class="form-items">
+              <span class="close" onclick="closeClassForm()">&times;</span>
+              <h3>Class Details</h3>
+              <p>Fill in the data below.</p>
+              <form id="classForm" onsubmit="createClass(event)">
+                  
+                  <!-- Full Name -->
+                  <div class="col-md-12">
+                      <input class="form-control" type="text" id="className" name="className" placeholder="Class name" required>
+                  </div>
+
+                  <!-- Email -->
+                  <div class="col-md-12">
+                      <input class="form-control" type="text" id="section" name="section" placeholder="Subtitle/Batch" required>
+                  </div>
+
+                  <!-- Position -->
+                  <div class="col-md-12">
+                      <input class="form-select mt-3" type="text" id="instructorName" name="instructorName" placeholder="Name" required>
+                      </select>
+                  </div>
+
+                  <br>
+
+                  <!-- Submit Button -->
+                  <div class="form-button mt-3">
+                      <button id="submit" type="submit" class="btn btn-primary">Create</button>
+                  </div>
+                  
+              </form>
+          </div>
+      </div>
+  </div>
+    
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

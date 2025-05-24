@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1>All Classes</h1>
+        <button onclick="openClassForm()">+ Create Class</button>
+    </header>
+
+    <!-- Class Dashboard -->
+    <div class="dashboard" id="classDashboard">
+        <!-- Classes will be dynamically added here -->
+    </div>
+
+    <!-- Create Class Modal -->
+    <div id="classFormModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeClassForm()">&times;</span>
+            <h2>Create a New Class</h2>
+            <form id="classForm" onsubmit="createClass(event)">
+                <label for="className">Class Name</label>
+                <input type="text" id="className" name="className" required>
+
+                <label for="instructorName">Instructor Name</label>
+                <input type="text" id="instructorName" name="instructorName" required>
+
+                <button type="submit">Create Class</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

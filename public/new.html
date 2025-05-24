@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Classroom Layout</title>
+  <link rel="stylesheet" href="new1.css">
+</head>
+<body>
+  <!-- <header class="header">
+    <h1>2024_Basic Numerical Methods (17B1NMA531)</h1>
+    <button class="user-icon">P</button>
+  </header> -->
+
+  <!-- Navbar Container -->
+  <div class="navbar">
+    <a id="home-img" onclick="redirectToHome()" class="active">Home</a>
+    <a id="streamLink" onclick="redirectToStream()" class="active">Stream</a>
+
+    <a id="classworkLink" onclick="redirectTocW()" class="active">Classwork</a>
+    <a id="peopleButton" onclick="redirectToPeople()" class="active">People</a>
+
+
+    <a id="attendanceButton" class="active">Attendance</a>
+    
+    
+    <!-- <button onclick="redirectToHome()">
+        <img src="home.png" id="home-img" alt="Home">
+    </button> -->
+
+</div>
+  
+  <div class="container">
+
+    <!-- Main Content -->
+    <main class="main-content">
+      
+      <!-- Banner -->
+      <section class="banner">
+        <h1 id="className">Class Details</h2>
+      
+      </section>
+
+      <!-- Content Area -->
+      <div class="big-container">
+      <section class="content-area">
+      <!-- Announcement Section -->
+      <div class="announcement">
+        <textarea id="announcement-text" placeholder="Announce something to your class"></textarea>
+        <button id="post-button">Post</button>
+      </div>
+
+        <!-- Upcoming Work Section -->
+        <div class="upcoming" id="upcoming-section">
+          <h3>Upcoming</h3>
+          <p>Woohoo, no work due soon!</p>
+          <a href="#">View all</a>
+        </div>
+
+        <!-- Teacher Post -->
+        <!-- <div class="post">
+          <div class="post-header">
+            <span class="teacher-name">Dr. Dinesh Bisht</span>
+            <span class="post-date">Nov 5</span>
+          </div>
+          <p>Please fill the form for PBL groups a group can have 3-5 students. <a href="#">Form link</a></p>
+        </div>
+      </section>
+    </div>
+    </main>
+  </div> -->
+
+  <!-- Link the JavaScript file -->
+  <script src="new2.js"></script>
+  <!-- <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        fetch('navbar.html')
+            .then(response => response.text())
+            .then(data => {console.log(data)
+                const navbarContainer = document.getElementById('navbar');
+                if (navbarContainer) {
+                    navbarContainer.innerHTML = data;
+                } else {
+                    console.error('Navbar container not found.');
+                }
+            })
+            .catch(error => console.error('Error loading navbar:', error));
+    });
+  </script>     -->
+</body>
+</html>

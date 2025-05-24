@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProfPal</title>
+    <link rel="icon" type="image/png" href="teacher.png"> 
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- navbar.html -->
+    <div class="navbar">
+        <a id="home-img" onclick="redirectToHome()" class="active">Home</a>
+        <a id="streamLink" onclick="redirectToStream()" class="active">Stream</a>
+    
+        <a id="classworkLink" onclick="redirectTocW()" class="active">Classwork</a>
+        <a id="peopleButton" onclick="redirectToPeople()" class="active">People</a>
+        <a id="attendanceButton" class="active">Attendance</a>
+        <!-- <button onclick="redirectToHome()">
+            <img src="home.png" id="home-img" alt="Home">
+        </button> -->
+    </div>
+
+    <div class="container" style="padding-left: 400px;">
+    
+        <button id="add-assignment-btn">Add Assignment</button>
+        
+    </div>
+    <div class="outer-container" style="padding: 0 400px;">
+    <div id="assignments-list"></div></div>
+    <div id="assignment-form" class="modal">
+        <div class="modal-content">
+            <h2 id="form-title">Add Assignment</h2>
+            <form id="assignment-form-data">
+                <label for="title">Title</label>
+                <input type="text" id="title" name="title" required><br>
+
+                <label for="description">Description</label>
+                <textarea id="description" name="description" required></textarea><br>
+
+                <label for="due-date">Due Date</label>
+                <input type="date" id="due-date" name="due-date" required><br>
+                <label for="file">Upload Assignment File</label>
+                <input type="file" id="file" name="file" required><br>
+    
+                <button type="submit" id="submit-btn">Save Assignment</button>
+                <button type="button" id="cancel-btn">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
