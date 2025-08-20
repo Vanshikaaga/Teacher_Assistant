@@ -18,7 +18,7 @@ students_collection = db["students"]
 with open('model1_linear_regression.pkl', 'rb') as model_file:
     model = pickle.load(model_file)
 
-with open('scaler.pkl', 'rb') as scaler_file:
+with open('scaler1.pkl', 'rb') as scaler_file:
     scaler = pickle.load(scaler_file)
 
 @app.route('/')

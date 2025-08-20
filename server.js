@@ -18,14 +18,17 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.static(path.join(__dirname, 'public'))); 
 // MongoDB Connection
 const client = new SpeechClient();
-mongoose.connect('mongodb://localhost:27017/assignmentManager', { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('Connected to MongoDB'))
-    .catch(err => console.log('Failed to connect to MongoDB', err));
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => console.log('Connected to MongoDB Atlas'))
+.catch(err => console.log('Failed to connect to MongoDB', err));
 
 // Import the Assignment model
 const Assignment = require('./models/assignment');
 const Class = require('./models/class');
-const serviceAccount = require('./Face_attendance/serviceAccountKey.json');
+const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT_KEY);
 firebaseAdmin.initializeApp({
     credential: firebaseAdmin.credential.cert(serviceAccount),
     databaseURL: 'https://faceattendacerealtime-85c07-default-rtdb.firebaseio.com/'
