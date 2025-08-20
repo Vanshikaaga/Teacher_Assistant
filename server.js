@@ -10,7 +10,17 @@ const fs = require('fs');
 const classesRoutes = require('./routes/classes');
 // Initialize the app
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: [
+    "http://localhost:3000",            // local frontend (if React/Vite/Next runs on 3000)
+    "http://127.0.0.1:5500",            // local if opening with Live Server in VS Code
+    "http://localhost:5000",            // local backend (optional if calling directly)
+    "https://teacher-assistant-pans.onrender.com"  // deployed frontend
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
+
 app.use(bodyParser.json());
  // Serve files from the "uploads" folder
 const Student = require('./models/student');
