@@ -27,7 +27,7 @@ document.addEventListener('click', function(event) {
 });
 const API_BASE = window.location.hostname.includes('localhost') 
                  ? 'http://localhost:5000'  // Local backend
-                 : 'https://teacher-assistant-pans.onrender.com/api/classes/all';
+                 : 'https://teacher-assistant-pans.onrender.com';
                  
 document.addEventListener("DOMContentLoaded", fetchClasses);
 async function fetchClasses() {
