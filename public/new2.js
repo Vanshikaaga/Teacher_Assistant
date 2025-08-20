@@ -19,11 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add event listener for the "Post" button
     document.getElementById("post-button").addEventListener("click", postAnnouncement);
 });
-
+const API_BASE = window.location.hostname.includes('localhost') 
+                 ? 'http://localhost:5000'  // Local backend
+                 : 'https://teacher-assistant-pans.onrender.com';
 // Function to fetch and display class details
 async function fetchClassDetails(classId) {
     try {
-        const response = await fetch(`http://localhost:5000/class/${classId}`);
+        const response = await fetch(`${API_BASE}/class/${classId}`);
 
         if (response.ok) {
             const data = await response.json();

@@ -22,7 +22,9 @@ document.getElementById('attendanceButton').onclick = () => {
 // Add even
 // Log the class ID to the console or use it as needed
 console.log("Class ID:", classId);
-
+const API_BASE = window.location.hostname.includes('localhost') 
+                 ? 'http://localhost:5000'  // Local backend
+                 : 'https://teacher-assistant-pans.onrender.com';
 // Fetch class details from the backend
 async function fetchClassDetails() {
     try {
@@ -38,7 +40,7 @@ async function fetchClassDetails() {
         }
 
         // Fetch class details from the backend
-        const response = await fetch(`http://localhost:5000/class/${classId}`);
+        const response = await fetch(`${API_BASE}/class/${classId}`);
         
         if (response.ok) {
             const data = await response.json();
