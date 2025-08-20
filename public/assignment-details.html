@@ -67,11 +67,13 @@
         // Get the assignment ID from the URL
         const params = new URLSearchParams(window.location.search);
         const assignmentId = params.get('id'); // Extract assignment ID from URL
-    
+        const API_BASE = window.location.hostname.includes('localhost') 
+                 ? 'http://localhost:5000'  // Local backend
+                 : 'https://teacher-assistant-pans.onrender.com';
         // Function to fetch class details by classId
         async function fetchClassDetails(classId) {
             try {
-                const response = await fetch(`http://localhost:5000/class/${classId}`);
+                const response = await fetch(`${API_BASE}/class/${classId}`);
                 return await response.json();
             } catch (error) {
                 console.error('Error fetching class details:', error);
@@ -82,7 +84,7 @@
         // Fetch the assignment details from the server
         async function fetchAssignmentDetails() {
             try {
-                const response = await fetch(`http://localhost:5000/assignments/${assignmentId}`);
+                const response = await fetch(`${API_BASE}/assignments/${assignmentId}`);
                 const data = await response.json();
                 const studentsList = document.getElementById('studentList');
                 
