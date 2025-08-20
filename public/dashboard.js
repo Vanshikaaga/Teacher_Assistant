@@ -25,13 +25,17 @@ document.addEventListener('click', function(event) {
         mainContent.classList.remove('sidebar-open'); 
     }
 });
-
+const API_BASE = window.location.hostname.includes('localhost') 
+                 ? 'http://localhost:5000'  // Local backend
+                 : 'https://your-app-name.onrender.com';
+                 
+document.addEventListener("DOMContentLoaded", fetchClasses);
 async function fetchClasses() {
     const dashboard = document.getElementById("classDashboard");
     dashboard.innerHTML = ''; // Clear existing classes
 
     try {
-        const response = await fetch("http://localhost:5000/api/classes/all");
+        const response = await fetch(`${API_BASE}/api/classes/all`);
         const classes = await response.json();
 
         if (response.ok) {
