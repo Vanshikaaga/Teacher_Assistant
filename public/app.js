@@ -1,8 +1,11 @@
 const urlParams = new URLSearchParams(window.location.search);
 const classId = urlParams.get('id'); 
 
+const API_BASE = window.location.hostname.includes('localhost') 
+                 ? 'http://localhost:5000'  // Local backend
+                 : 'https://teacher-assistant-pans.onrender.com';
 
-const apiUrl = `http://localhost:5000/assignments?classId=${classId}`;
+const apiUrl = `${API_BASE}/assignments?classId=${classId}`;
 
 document.getElementById('peopleButton').onclick = () => {
     window.location.href = `/class-details.html?id=${classId}`;
@@ -45,7 +48,7 @@ async function fetchClassDetails() {
         // }
 
         // Fetch class details from the backend
-        const response = await fetch(`http://localhost:5000/class/${classId}`);
+        const response = await fetch(`${API_BASE}/class/${classId}`);
         
         if (response.ok) {
             const data = await response.json();
@@ -162,7 +165,7 @@ document.getElementById('assignment-form-data').addEventListener('submit', async
     formData.append('classId', classId)
 
     try {
-        const response = await fetch('http://localhost:5000/assignments', {
+        const response = await fetch('${API_BASE}/assignments', {
             method: 'POST',
             body: formData
         });
