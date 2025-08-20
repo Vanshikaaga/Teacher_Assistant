@@ -79,7 +79,7 @@ async function fetchClasses() {
 function redirectToClassDetails(classId) {
     // Redirect to class details page
     console.log("hiii")
-    window.location.href = `http://localhost:5000/class-details.html?id=${classId}`;
+    window.location.href = `${API_BASE}/class-details.html?id=${classId}`;
     // Make sure the URL matches your backend route
 }
 
@@ -92,7 +92,7 @@ async function createClass(event) {
     const section=document.getElementById("section").value;
 
     try {
-        const response = await fetch("http://localhost:5000/api/classes/create", {
+        const response = await fetch(`${API_BASE}/api/classes/create`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
